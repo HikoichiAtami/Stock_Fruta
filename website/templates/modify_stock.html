@@ -1,0 +1,108 @@
+{% extends "base.html" %} {% block title %}Modificar Stock{% endblock %} {%
+block content %}
+
+<div class="container py-2">
+  <div class="row d-flex justify-content-center align-items-center">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      <div class="card bg-dark text-white" style="border-radius: 1rem">
+        <div class="card-body text-center">
+          <form
+            name="form_fruit"
+            id="form_fruit"
+            action="/search_stock"
+            method="GET"
+          >
+            <div class="form-group col-md-5">
+              <label for="fruit">Fruta</label>
+              <select id="fruit" name="fruit" class="form-control">
+                {% for fruta in fruit %}
+                <option name="fruta" value="{{fruta.fruit_id}}">
+                  {{ fruta.fruit }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="close">Buscar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% if data %}
+<div class="pt-3">
+  <table class="table table-striped table-dark text-center">
+    <thead>
+      <tr>
+        <th scope="col">Fruta</th>
+        <th scope="col">Kilos</th>
+        <th scope="col">Centro Distribución</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fruit, stock in data %}
+      <tr>
+        <td>{{ fruit.fruit }}</td>
+        <td contenteditable="true" class="kilo" id="kilo">{{ stock.kilo }}</td>
+        <td class="centro" id="centro">{{ stock.center }}</td>
+        <td style="display: none" class="stock_id" id="stock_id">
+          {{stock.id}}
+        </td>
+        <td contenteditable="false">
+          <button
+            type="button"
+            class="btn btn-primary editbtn"
+            onclick="edit_stock({{stock.id}})"
+          >
+            Editar
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            onclick="delete_stock({{ stock.id}})"
+          >
+            Borrar
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<form class="edit" id="edit" method="post">
+  <input
+    type="hidden"
+    value=""
+    id="id_stock"
+    name="id_stock"
+    class="id_stock"
+  />
+  <input type="hidden" value="" id="kilos" name="kilos" class="kilos" />
+</form>
+{% endif %}
+
+<script>
+  function delete_stock(stock_id) {
+    if (confirm("¿Quieres eliminar este registro?") == true) {
+      $("#id_stock").val(stock_id);
+      $("#edit").attr("action", "delete_stock").submit();
+    }
+  }
+
+  function edit_stock(stock_id) {
+    kilo = $("#kilo").text();
+    var validNumber = new RegExp(/^\d*\.?\d*$/);
+    if (!validNumber.test(kilo)) {
+      alert("Ha ingresado una cantidad incorrecta de Kilos");
+    } else if (kilo == "") {
+      alert("Ha ingresado una cantidad incorrecta de Kilos");
+    } else {
+      if (confirm("¿Quieres modificar el registro?") == true) {
+        $("#id_stock").val(stock_id);
+        $("#kilos").val(kilo);
+        $("#edit").attr("action", "edit_stock").submit();
+      }
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Modificar Stock{% endblock %}
+{% block content %}
+<section class="gradient-custom">
+    <div class="container py-5">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body px-5 text-center">
+              <div class="mb-md-5 mt-md-4 pb-5">
+                <form method="POST" action="/new_stock">
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <label for="fruit">Fruta</label>
+                            <select id="fruit" name="fruit" class="form-control">
+                              {% for fruta in fruit %}
+                              <option name="fruta" id="fruta" value="{{fruta.fruit_id}}">{{ fruta.fruit }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="center">Centro Distribución</label>
+                            <input type="text" class="form-control text-center" id="center" name="center" placeholder="Ingrese Centro" required>
+                          </div>
+                          
+                          <div class="form-group col-md-6">
+                            <label for="stock">Stock</label>
+                            <input type="number" class="form-control text-center" id="stock" name="stock" placeholder="Ingrese Stock" required>
+                            <p class="text-white-50 mb-2">STOCK EN KILOS</p>
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

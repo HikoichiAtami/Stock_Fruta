@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Venta{% endblock %}
+{% block content %}
+
+<div class="container py-2 d-print-none">
+  <div class="row d-flex justify-content-center align-items-center">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      <div class="card bg-dark text-white" style="border-radius: 1rem">
+        <div class="card-body text-center">
+          <form
+            name="form_sale"
+            id="form_sale"
+            action="/sale_search"
+            method="GET"
+          >
+              
+              <label for="search">Ingrese Nombre Cliente</label>
+              <input type="text" class="name bg-dark text-white text-center float-right col-lg-6 " id="name" name="name" required> 
+              <div class="form-group col-md-5"></div>
+              <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% if data %}
+<div class="pt-3 d-print-none">
+  <table class="table table-striped table-dark text-center">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for client,sale in data %}
+      <tr>
+        <td>{{ client.name }} </td>
+        <td><input type="text" disabled class="fecha text-white text-center bg-dark" id="fecha{{sale.sale_id}}" name="fecha" value="{{sale.date}}"></td>
+        <td><button class="btn" onclick="getsale({{client.client_id}},{{sale.sale_id}},{{sale.iva}},{{sale.neto}},{{sale.total}})"><i class="fa fa-search text-white"></i></button></td>
+      </tr>
+      {% endfor %}
+      
+    </tbody>
+  </table>
+  <form class="salesearch" id="salesearch" method="get">
+    <input
+      type="hidden"
+      value=""
+      id="sale"
+      name="sale"
+      class="sale"
+    />
+    <input type="hidden" value="" id="sale_id" name="sale_id" class="sale_id" />
+    <input type="hidden" value="" id="client_id" name="client_id" class="client_id" />
+    <input type="hidden" value="" id="sale_date" name="sale_date" class="sale_date" />
+    <input type="hidden" value="" id="neto" name="neto" class="neto" />
+    <input type="hidden" value="" id="19" name="19" class="19" />
+    <input type="hidden" value="" id="total" name="total" class="total" />
+  </form>
+{% endif %}
+{% if saledata %}
+<div class="bg-dark pl-3 pb-2 pt-2 mt-2">
+  <label for="name" class="text-white text-center">Nombre</label>
+  <input type="text" value="{{cliente.name}}" class="name bg-dark text-white text-center col-lg-4" id="name" name="name" disabled />
+  <label for="address" class="text-white text-center">Dirección</label>
+  <input type="text" value="{{cliente.address}}" class="address bg-dark text-white text-center col-lg-6" id="address" name="address" disabled/>
+</div>
+<div class="bg-dark pl-3 pb-2 pt-2 mt-2">
+  <label for="phone" class="text-white text-center">Teléfono</label>
+  <input type="text" value="{{cliente.phone}}" class="phone bg-dark text-white text-center" id="phone" name="phone" disabled />
+  <label for="date" class="pl-3 text-white text-center">Fecha</label>
+  <input type="text" value="{{date}}" class="date bg-dark text-white text-center" id="date" name="date" disabled/>
+</div>
+<div class="pt-3">
+  <table class="table table-striped table-dark text-center">
+    <thead>
+      <tr>
+        <th scope="col">Fruta</th>
+        <th scope="col">Precio Por Kilo</th>
+        <th scope="col">Kilos</th>
+        <th scope="col">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sale,saledetail,fruit,prices in saledata %}   
+      <tr>
+        <td>{{ fruit.fruit }}</td>
+        <td>{{ prices.price }}</td>
+        <td>{{ saledetail.kilo }}</td>
+        <td>{{ saledetail.totalFruit }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="float-right">
+  <div class="bg-dark pr-5">
+    <label for="sub" class="text-white text-center px-3">Neto</label>
+    <input type="number" name="sub" id="sub" class="sub text-center text-white bg-dark float-right" disabled placeholder="0" value="{{neto}}">
+  </div>
+  <div class="bg-dark  pr-5">
+    <label for="iva" class="text-white text-center px-3">IVA</label>
+    <input type="number" name="iva" id="iva" class="iva text-center text-white bg-dark float-right" disabled placeholder="0" value="{{iva}}">
+  </div>
+  <div class="bg-dark pr-5">
+    <label for="totaliva" class="text-white text-center px-3">Total</label>
+    <input type="number" name="totaliva" id="totaliva" class="totaliva text-center text-white bg-dark float-right" disabled placeholder="0" value="{{total}}">
+  </div>
+</div>
+  <button class="btn btn-primary hidden-print d-print-none" onclick="window.print(); return false;"><span class="glyphicon glyphicon-print" aria-hidden="true"></span>Imprimir</button>
+</div>
+{% endif %}
+<script>
+
+function getsale(client_id,sale_id,iva,neto,total){
+  $("#client_id").val(client_id);
+  $("#sale_id").val(sale_id);
+  $("#neto").val(neto);
+  $("#19").val(iva);
+  $("#total").val(total);
+  $("#sale_date").val($("#fecha" + sale_id).val());
+  $("#salesearch").attr("action", "getsales").submit();
+}
+
+</script>
+{% endblock %}

@@ -6,4 +6,4 @@ app = create_app()
 
 # Validacion para que la aplicacion se ejecute solo desde la pagina principal
 if __name__ == '__main__':
-    app.run(debug=True,host="0.0.0.0")
+    app.run(debug=True,host='0.0.0.0', port=5000)

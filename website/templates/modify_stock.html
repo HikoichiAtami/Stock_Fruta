@@ -12,7 +12,7 @@ block content %}
             action="/search_stock"
             method="GET"
           >
-            <div class="form-group col-md-5">
+            
               <label for="fruit">Fruta</label>
               <select id="fruit" name="fruit" class="form-control">
                 {% for fruta in fruit %}
@@ -21,8 +21,10 @@ block content %}
                 </option>
                 {% endfor %}
               </select>
+              <div class="form-group col-md-5"></div>
+              <button type="submit" class="btn btn-primary">Buscar</button>
             </div>
-            <button type="submit" class="close">Buscar</button>
+            
           </form>
         </div>
       </div>
@@ -43,7 +45,8 @@ block content %}
       {% for fruit, stock in data %}
       <tr>
         <td>{{ fruit.fruit }}</td>
-        <td contenteditable="true" class="kilo" id="kilo">{{ stock.kilo }}</td>
+        <!--<td contenteditable="true" class="kilos" id="kilos">{{ stock.kilo }}</td>-->
+        <td><input type="number" value="{{stock.kilo}}" name="kilo" class="kilo text-center bg-dark text-white" id="kilo{{stock.id}}" placeholder="{{stock.kilo}}"></td>
         <td class="centro" id="centro">{{ stock.center }}</td>
         <td style="display: none" class="stock_id" id="stock_id">
           {{stock.id}}
@@ -90,11 +93,8 @@ block content %}
   }
 
   function edit_stock(stock_id) {
-    kilo = $("#kilo").text();
-    var validNumber = new RegExp(/^\d*\.?\d*$/);
-    if (!validNumber.test(kilo)) {
-      alert("Ha ingresado una cantidad incorrecta de Kilos");
-    } else if (kilo == "") {
+    kilo = $('#kilo' + stock_id).val();
+    if (kilo <= 0){
       alert("Ha ingresado una cantidad incorrecta de Kilos");
     } else {
       if (confirm("¿Quieres modificar el registro?") == true) {

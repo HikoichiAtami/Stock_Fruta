@@ -26,18 +26,34 @@ class Stock(db.Model):
 # Tabla con las ventas
 class Sale(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
-    total_kilo = db.Column(db.Integer)
-    value = db.Column(db.Integer)
-    date = db.Column(db.DateTime(timezone=True), default=func.now())
+    neto = db.Column(db.Integer)
+    iva = db.Column(db.Integer)
+    total = db.Column(db.Integer)
+    date = db.Column(db.String(150))
     sales_details = db.relationship('Sale_detail')
+    client_id = db.Column(db.Integer, db.ForeignKey('client.client_id'))
 
 # Tabla con el detalle de ventas
 class Sale_detail(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sale_id = db.Column(db.Integer, db.ForeignKey('sale.sale_id'))
     fruit_id = db.Column(db.Integer, db.ForeignKey('fruit.fruit_id'))
-    value = db.Column(db.Integer)
+    kilo = db.Column(db.Integer)
+    totalFruit = db.Column(db.Integer)
 
+# Tabla que mantiene los precios
+class Prices(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    price = db.Column(db.Integer)
+    fruit_id = db.Column(db.Integer, db.ForeignKey('fruit.fruit_id'))
+
+# Tabla de clientes
+class Client(db.Model):
+    client_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150))
+    phone = db.Column(db.Integer)
+    address = db.Column(db.String(150))
+    sale_id = db.relationship('Sale')
 
 
 

@@ -13,7 +13,7 @@
       {% for fruit, stock in data %}
       <tr>
         <td>{{ fruit.fruit }}</td>
-        <td contenteditable="true">{{ stock.kilo }}</td>
+        <td><input type="number" value="{{stock.kilo}}" name="kilo" class="kilo text-center bg-dark text-white" id="kilo{{stock.id}}" placeholder="{{stock.kilo}}"></td>
         <td>{{ stock.center }}</td>
         <td>
           <button
@@ -58,11 +58,8 @@
   }
 
   function edit_stock(stock_id) {
-    kilo = $("#kilo").text();
-    var validNumber = new RegExp(/^\d*\.?\d*$/);
-    if (!validNumber.test(kilo)) {
-      alert("Ha ingresado una cantidad incorrecta de Kilos");
-    } else if (kilo == "") {
+    kilo = $('#kilo' + stock_id).val();
+    if (kilo <= 0){
       alert("Ha ingresado una cantidad incorrecta de Kilos");
     } else {
       if (confirm("¿Quieres modificar el registro?") == true) {
